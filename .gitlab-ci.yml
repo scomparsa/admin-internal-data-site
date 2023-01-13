@@ -1,0 +1,57 @@
+.access_branch_template: &access_branch
+  only:
+    - master
+    - dev
+    - lq-chore/vite
+
+variables:
+  project: admin-internal-data-site
+  scripts: /data/yaml-shell
+  DEPLOY_TO: /home/work/admin-internal-data-site
+  SCRIPTS_STORAGE: /home/gitlab-runner/runner-scripts
+
+stages:
+  - before_deploy
+  - deploy_dev
+  - deploy_prod
+
+before_deploy:
+  <<: *access_branch
+  stage: before_deploy
+  before_script:
+    - nvm use v16
+  script:
+    - npm ci --prefer-offline --no-audit
+    - bash $SCRIPTS_STORAGE/lint-src.sh
+    - if [ ${CI_COMMIT_REF_NAME} == "master" ]; then npm run build:prod; else npm run build:dev; fi
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .npm/
+      - .cache/
+      - dist/
+  artifacts:
+    name: '$CI_JOB_NAME'
+    expire_in: 1 week
+    paths:
+      - dist/
+
+deploy_dev:
+  stage: deploy_dev
+  when: on_success
+  script:
+    - bash $SCRIPTS_STORAGE/deploy-vite.sh
+  environment:
+    name: development
+  only:
+    - dev
+
+deploy_prod:
+  stage: deploy_prod
+  when: on_success
+  script:
+    - bash $SCRIPTS_STORAGE/deploy-vite.sh
+  environment:
+    name: production
+  only:
+    - master

@@ -1,0 +1,19 @@
+/** @define utilities */
+
+@directions: top, right, left;
+.sizeSet() { // stylelint-disable-line plugin/selector-bem-pattern
+  lg: @padding-lg;
+  md: @padding-md;
+  sm: @padding-sm;
+  xs: @padding-xs;
+};
+
+each(@directions, {
+  @dir: @value;
+
+  each(.sizeSet(), .(@sizeV, @sizeK) {
+    .u-margin-@{dir}-@{sizeK} {
+      margin-@{dir}: @sizeV;
+    }
+  });
+});

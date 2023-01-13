@@ -1,0 +1,30 @@
+/** @define global-header */
+@pro-header-hover-bg: rgba(0, 0, 0, 0.025);
+
+.global-header {
+  position: relative;
+  height: @layout-header-height;
+  line-height: @layout-header-height;
+  padding: 0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  z-index: 1;
+
+  &__action {
+    color: @text-color;
+    cursor: pointer;
+    transition: all 0.3s, padding 0s;
+    width: 66px;
+    text-align: center;
+
+    &:hover {
+      background: @pro-header-hover-bg;
+    }
+
+    &--triggered {
+      display: inline-block;
+      height: 100%;
+      font-size: 20px;
+    }
+  }
+}

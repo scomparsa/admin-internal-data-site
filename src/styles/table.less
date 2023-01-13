@@ -1,0 +1,39 @@
+/** @define b-table */
+
+.b-table {
+  :global {
+    table {
+      table-layout: auto;
+    }
+
+    .ant-table-scroll-horizontal {
+      min-height: 330px;
+    }
+
+    .ant-table-thead {
+      tr {
+        th {
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .ant-table-tbody {
+      overflow-x: auto !important;
+
+      tr {
+        td {
+          &:not(:last-child) {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+
+    .ant-table-selection-column {
+      min-width: 50px !important;
+    }
+  }
+}
